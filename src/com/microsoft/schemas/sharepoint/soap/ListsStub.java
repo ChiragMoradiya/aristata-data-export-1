@@ -7,6 +7,13 @@
  */
         package com.microsoft.schemas.sharepoint.soap;
 
+import org.apache.commons.httpclient.Credentials;
+import org.apache.commons.httpclient.NTCredentials;
+import org.apache.commons.httpclient.auth.AuthScheme;
+import org.apache.commons.httpclient.auth.CredentialsNotAvailableException;
+import org.apache.commons.httpclient.auth.CredentialsProvider;
+import org.apache.commons.httpclient.params.DefaultHttpParams;
+
 /*
         *  ListsStub java implementation
         */
@@ -398,6 +405,16 @@
        throws org.apache.axis2.AxisFault {
          this(configurationContext,targetEndpoint,false);
    }
+    
+    private void setupCredentialProvider () {
+        final NTCredentials nt = new NTCredentials("AristataSvc", "bcone@investment31", "KERIKAWIN7", "Bristlecone");
+        final CredentialsProvider myCredentialsProvider = new CredentialsProvider() {
+         public Credentials getCredentials(AuthScheme scheme, String host, int port, boolean proxy) throws CredentialsNotAvailableException {
+          return nt;
+         }
+        };
+        DefaultHttpParams.getDefaultParams().setParameter("http.authentication.credential-provider", myCredentialsProvider);
+      }
 
    /**
      * Constructor that takes in a configContext  and useseperate listner
@@ -405,6 +422,7 @@
    public ListsStub(org.apache.axis2.context.ConfigurationContext configurationContext,
         java.lang.String targetEndpoint, boolean useSeparateListener)
         throws org.apache.axis2.AxisFault {
+        setupCredentialProvider();
          //To populate AxisService
          populateAxisService();
          populateFaults();
