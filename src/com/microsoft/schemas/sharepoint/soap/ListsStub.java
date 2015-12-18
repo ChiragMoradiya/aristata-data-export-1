@@ -422,7 +422,7 @@ import org.apache.commons.httpclient.params.DefaultHttpParams;
    public ListsStub(org.apache.axis2.context.ConfigurationContext configurationContext,
         java.lang.String targetEndpoint, boolean useSeparateListener)
         throws org.apache.axis2.AxisFault {
-        setupCredentialProvider();
+//        setupCredentialProvider();
          //To populate AxisService
          populateAxisService();
          populateFaults();

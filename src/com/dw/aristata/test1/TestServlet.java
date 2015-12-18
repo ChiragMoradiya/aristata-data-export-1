@@ -14,22 +14,41 @@ import com.microsoft.schemas.sharepoint.soap.ListsStub;
  */
 public class TestServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	
+	ListsStub listsStub;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
     public TestServlet() {
         super();
-        // TODO Auto-generated constructor stub
+        try{
+        	listsStub = new ListsStub();
+        } catch(Exception e) {
+        	throw new RuntimeException("Failed to create ListsStub");
+        }
     }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		ListsStub listsStub = new ListsStub();
-		  String sResponse = listsStub.getListCollection(new ListsStub.GetListCollection()).toString();
-		  response.getWriter().append(sResponse);
+		String action = request.getParameter("action");
+		String list = request.getParameter("list");
+		if("get-list-and-view".equals(action)) {
+			ListsStub.GetListAndView getListAndView = new ListsStub.GetListAndView();
+			getListAndView.setListName(list);
+			listsStub.getListAndView(getListAndView);
+		} else if("get-list-items".equals(action)) {
+			ListsStub.GetListItems getListItems = new ListsStub.GetListItems();
+			getListItems.setListName(list);
+			listsStub.getListCollection(new ListsStub.GetListCollection());
+		} else if("get-list-collection".equals(action)) {
+		  listsStub.getListCollection(new ListsStub.GetListCollection());
+		} else {
+			response.getWriter().append("Invalid action");
+		}
+		response.getWriter().append("OK");
 	}
 
 	/**
